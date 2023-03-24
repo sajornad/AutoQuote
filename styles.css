@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #89CFF0;
+  }
+  
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #BFEFFF;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  label {
+    display: inline-block;
+    width: 200px;
+    margin-bottom: 10px;
+  }
+  
+  input, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  
+  button {
+    display: block;
+    margin: 0 auto;
+    background-color: #1E90FF;
+    color: #FFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
