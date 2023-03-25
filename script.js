@@ -1,4 +1,38 @@
-function formatPrice(price) {
+function getConfig() {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.responseText));
+          } else {
+            reject(xhr.statusText);
+          }
+        }
+      };
+      xhr.open('GET', 'config.json', true);
+      xhr.send();
+    });
+  }
+
+function formatDateForFileName(date) {
+    return date.replace(/\//g, '_');
+  }
+  
+  function generateQRCode(url) {
+    const qrCodeContainer = document.createElement('div');
+    new QRCode(qrCodeContainer, url);
+  
+    return qrCodeContainer;
+  }
+
+  function qrCodeToDataURL(qrCodeElement) {
+    const canvas = qrCodeElement.querySelector('canvas');
+    return canvas.toDataURL('image/png');
+  }
+  
+
+    function formatPrice(price) {
     const formattedPrice = parseFloat(price).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return formattedPrice;
   }
@@ -72,8 +106,12 @@ function getBase64Image(url, callback) {
 
   
   
-  document.getElementById('quote-form').addEventListener('submit', (event) => {
+  document.getElementById('quote-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+
+    // Get the configuration from the config.json file
+    const config = await getConfig();
+
   
     const clientName = document.getElementById('client-name').value;
     const date = document.getElementById('date').value;
@@ -82,8 +120,11 @@ function getBase64Image(url, callback) {
     const logoInput = document.getElementById('logo');
     const logoFile = logoInput.files[0];
   
+    
     // Use a default logo URL if no logo is uploaded
-    const defaultLogoUrl = '3govideo_logo.png'; // Replace with the URL of your default logo
+    // Replace the defaultLogoUrl and baseURL variables with values from the configuration
+    const defaultLogoUrl = config.defaultLogoUrl;
+    const baseURL = config.HOST;
   
     function generatePDF(logoDataURL) {
       const doc = new jsPDF();
@@ -113,8 +154,33 @@ function getBase64Image(url, callback) {
       doc.setFontSize(12);
       doc.text(doc.splitTextToSize(conditions, 180), 10, yOffset);
   
-      // Save the PDF
-      doc.save(`Quote-${clientName}-${date}.pdf`);
+      const formattedDate = formatDateForFileName(date);
+      
+      // Generate the QR code (replace the baseURL with your server's URL)
+      const baseURL = 'https://360.3govideo.com/fast-quote'; // Replace with your server's URL
+      const pdfFileName = config.fileNameTemplate
+                        .replace('{clientName}', clientName)
+                        .replace('{date}', formattedDate);
+
+      const pdfURL = `${baseURL}/${pdfFileName}`;
+      
+      // Display the QR code on the page
+      //const qrCode = generateQRCode(pdfURL);
+      //document.body.appendChild(qrCode);
+
+    // Create the QR code element
+    const qrCodeElement = generateQRCode(pdfURL);
+
+    // Convert the QR code to a data URL and add it to the PDF
+    const qrCodeDataURL = qrCodeToDataURL(qrCodeElement);
+    doc.addImage(qrCodeDataURL, 'PNG', 150, 10, 50, 50);
+
+    // Save the updated PDF with the QR code
+    doc.save(pdfFileName);
+
+
+
+
     }
   
     if (logoFile) {

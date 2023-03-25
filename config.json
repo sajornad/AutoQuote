@@ -1,0 +1,5 @@
+{
+  "HOST": "https://your-server-url.com",
+  "defaultLogoUrl": "3govideo_logo.png",
+  "fileNameTemplate": "Quote-{clientName}-{date}_3GOVideo.pdf"
+}
