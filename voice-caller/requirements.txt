@@ -1,0 +1,5 @@
+livekit-agents[anthropic,deepgram,elevenlabs,silero]~=1.8
+livekit-plugins-noise-cancellation~=0.3
+livekit-api>=1.2
+gspread>=6.2
+python-dotenv>=1.0
