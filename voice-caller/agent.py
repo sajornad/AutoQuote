@@ -49,7 +49,7 @@ RESULTADOS = {
     "numero_equivocado",
 }
 
-CONTACTO_DEMO = {"nombre": "Daniel", "empresa": "Comercial Demo", "ciudad": "Ciudad de México"}
+CONTACTO_DEMO = {"nombre": "Daniel", "empresa": "Comercial Demo", "ciudad": "Bogotá"}
 
 
 class Vendedor(Agent):

@@ -16,7 +16,7 @@ Google Sheets ──► dialer.py ──(dispatch)──► LiveKit Cloud ──
 | `dialer.py` | Lee la hoja y lanza las llamadas una por una, en horario permitido. |
 | `prompts.py` | Personalidad, reglas de venta y carga de la base de conocimiento. |
 | `sheets.py` | Lectura y escritura en Google Sheets. |
-| `kb/` | Información del servicio (`.md` o `.txt`). **Reemplaza el ejemplo.** |
+| `kb/` | Información del servicio (`.md` o `.txt`). Incluye `3govideo.md` (completar precios y contacto). |
 
 ## 1. Instalación
 
@@ -54,7 +54,7 @@ ajustar la base de conocimiento y el tono. Las transcripciones se guardan en `tr
      "trunk": {
        "name": "salida",
        "address": "mi-trunk.pstn.twilio.com",
-       "numbers": ["+52XXXXXXXXXX"],
+       "numbers": ["+57XXXXXXXXXX"],
        "authUsername": "usuario",
        "authPassword": "contraseña"
      }
@@ -99,13 +99,13 @@ Cuando funcione, corre la lista: `python dialer.py --limite 5` y después `pytho
 
 - **Latencia**: el modelo se elige con `CLAUDE_MODEL`. Si las respuestas tardan demasiado en la llamada, prueba
   `claude-sonnet-5-5` o `claude-haiku-5-5`.
-- **Horario**: `HORA_INICIO`, `HORA_FIN` y `ZONA_HORARIA` (lunes a sábado).
+- **Horario**: `HORA_INICIO`, `HORA_FIN` y `ZONA_HORARIA` (lunes a viernes; sábados hasta `HORA_FIN_SABADO`, por defecto 3 p. m.).
 - **Personaje**: `NOMBRE_VENDEDOR` y `NOMBRE_EMPRESA`. Las reglas de venta están en `prompts.py`.
 - **Base de conocimiento**: va completa dentro de las instrucciones. Funciona bien hasta unas
   decenas de páginas; si crece mucho, conviene una búsqueda (RAG).
 
 ## Aviso legal
 
-Las llamadas automatizadas con IA están reguladas (p. ej. TCPA en EE. UU.; en México, el REPEP de
-PROFECO y la ley de protección de datos). Llama solo a contactos con consentimiento, respeta los
+Las llamadas automatizadas con IA están reguladas (en Colombia, la Ley 1581 de 2012 de datos personales y la Ley 2300 de 2023,
+que limita las llamadas comerciales a lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m.). Llama solo a contactos con consentimiento, respeta los
 horarios y las solicitudes de no llamar. El agente dice que es una asistente virtual si se lo preguntan.

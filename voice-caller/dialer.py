@@ -23,9 +23,10 @@ import sheets
 load_dotenv()
 
 AGENT_NAME = os.getenv("AGENT_NAME", "vendedor-telefonico")
-ZONA = ZoneInfo(os.getenv("ZONA_HORARIA", "America/Mexico_City"))
-HORA_INICIO = int(os.getenv("HORA_INICIO", "9"))
-HORA_FIN = int(os.getenv("HORA_FIN", "19"))
+ZONA = ZoneInfo(os.getenv("ZONA_HORARIA", "America/Bogota"))
+HORA_INICIO = int(os.getenv("HORA_INICIO", "8"))
+HORA_FIN = int(os.getenv("HORA_FIN", "18"))
+HORA_FIN_SABADO = int(os.getenv("HORA_FIN_SABADO", "15"))
 PAUSA = int(os.getenv("PAUSA_ENTRE_LLAMADAS", "10"))
 MAX_INTENTOS = int(os.getenv("MAX_INTENTOS", "3"))
 ESPERA_MAXIMA = 15 * 60  # segundos que esperamos a que termine una llamada
@@ -34,18 +35,21 @@ LLAMAR_DE_NUEVO = {"", "pendiente", "volver_a_llamar", "no_contesto", "sin_resul
 
 
 def normalizar(telefono: str) -> str | None:
-    """Convierte a formato E.164 (+521...). Usa PREFIJO_PAIS si el número no trae '+'."""
+    """Convierte a formato E.164 (+57...). Usa PREFIJO_PAIS si el número no trae '+'."""
     t = re.sub(r"[^\d+]", "", str(telefono))
     if not t:
         return None
     if not t.startswith("+"):
-        t = os.getenv("PREFIJO_PAIS", "+52") + t
+        t = os.getenv("PREFIJO_PAIS", "+57") + t
     return t if re.fullmatch(r"\+\d{8,15}", t) else None
 
 
 def en_horario() -> bool:
     ahora = datetime.now(ZONA)
-    return ahora.weekday() < 6 and HORA_INICIO <= ahora.hour < HORA_FIN  # lunes a sábado
+    if ahora.weekday() == 6:  # domingo: no se llama
+        return False
+    fin = min(HORA_FIN, HORA_FIN_SABADO) if ahora.weekday() == 5 else HORA_FIN
+    return HORA_INICIO <= ahora.hour < fin
 
 
 def pendientes(solo_fila: int | None) -> list[tuple[int, dict]]:
