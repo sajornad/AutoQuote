@@ -1,0 +1,5 @@
+0.1|Así construimos una vendedora con inteligencia artificial en una sola tarde.
+5.5|Primero, el código: escucha, piensa y responde.
+10.2|Luego, una hoja de Google con los clientes por llamar.
+15.0|A las cinco de la tarde, sonó la primera llamada.
+19.8|Se llama 3GO Vision. ¿La quieres en tu empresa?
